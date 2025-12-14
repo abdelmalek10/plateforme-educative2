@@ -1,19 +1,22 @@
 from pathlib import Path
-from datetime import timedelta     # IMPORT AJOUTÉ
+from datetime import timedelta
+import os
+from dotenv import load_dotenv
+
+# Load .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-...'
+# Quick-start development settings
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -32,7 +35,19 @@ INSTALLED_APPS = [
     'timetable',
     'messaging',
     'frontend',
+    'service_discovery',
+    'Notifications', # Added explicitly to ensure it's loaded
 ]
+
+
+# Service Deployment Config
+SERVICE_NAME = os.environ.get("SERVICE_NAME", "monolith")
+SERVICE_PORT = os.environ.get("SERVICE_PORT", "8000")
+SERVICE_HOST = os.environ.get("SERVICE_HOST", "127.0.0.1")
+CONSUL_HOST = os.environ.get("CONSUL_HOST", "localhost")
+RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
+RABBITMQ_USER = os.environ.get("RABBITMQ_USER", "guest")
+RABBITMQ_PASS = os.environ.get("RABBITMQ_PASS", "guest")
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

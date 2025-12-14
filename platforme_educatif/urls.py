@@ -7,8 +7,9 @@ urlpatterns = [
     path("api/auth/", include("accounts.urls")),
     path("api/cours/", include("cours.urls")),
     path("api/timetable/", include("timetable.urls")),
-    path("api/messaging/", include("messaging.urls")),  # si pas encore -> à ajouter
+    path("api/messaging/", include("messaging.urls")),
 
     # Frontend
     path("", include("frontend.urls")),
+    path("", include("service_discovery.urls")),
 ]

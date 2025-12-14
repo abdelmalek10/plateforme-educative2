@@ -14,7 +14,6 @@ class CompteManager(BaseUserManager):
         
         # par defaut c'est un etudiant
         role_par_defaut = "STUDENT"
-        # other_fields.setdefault("role", role_par_defaut) # ça marchait pas alors j'ai changé
 
         user = self.model(email=email, **other_fields)
         user.set_password(password)
@@ -37,11 +36,6 @@ class CompteManager(BaseUserManager):
 
 class Compte(AbstractBaseUser, PermissionsMixin):
 
-    # Roles possibles
-    # STUDENT = 'STUDENT'
-    # TEACHER = 'TEACHER'
-    # ADMIN = 'ADMIN'
-    
     # J'utilise TextChoices c'est mieux
     class Role(models.TextChoices):
         STUDENT = "STUDENT", "Étudiant"
@@ -58,7 +52,6 @@ class Compte(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     
-    # date_creation = models.DateTimeField(auto_now_add=True) # ça buggait j'ai enlevé
     date_creation = models.DateTimeField(auto_now_add=True)
 
     objects = CompteManager()

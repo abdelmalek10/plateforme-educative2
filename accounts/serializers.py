@@ -12,9 +12,6 @@ class StudentRegSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'password', 'nom', 'prenom']
 
     def create(self, validated_data):
-        # print("DEBUG: creating user")
-        print(validated_data) # pour verifier les données
-
         # On fait à la main pour être sur
         password = validated_data.pop('password')
         user = Compte(**validated_data)
@@ -31,10 +28,8 @@ class CustomTokenSerializer(TokenObtainPairSerializer):
 
         # Ajout des trucs dans le token
         token['email'] = user.email
-        token['role'] = user.role
+        token['role'] = "TEACHER" if user.role == "ADMIN" else user.role
         token['nom'] = user.nom
         token['prenom'] = user.prenom
         
-        # print(token) 
-
         return token

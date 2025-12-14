@@ -28,7 +28,7 @@ class MeView(APIView):
                 "email": user.email,
                 "nom": user.nom,
                 "prenom": user.prenom,
-                "role": user.role,
+                "role": "TEACHER" if user.role == "ADMIN" else user.role,
             }
             return Response(data)
         except Exception as e:
@@ -39,8 +39,6 @@ class RegisterStudentView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        print("Registration attempt:", request.data) # DEBUG
-
         # Petite validation manuelle au cas où
         email = request.data.get('email')
         if '@' not in email:

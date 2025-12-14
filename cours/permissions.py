@@ -13,5 +13,5 @@ class IsTeacher(BasePermission):
         return bool(
             user
             and user.is_authenticated
-            and getattr(user, "role", None) == "TEACHER"
+            and (getattr(user, "role", None) == "TEACHER" or getattr(user, "role", None) == "ADMIN")
         )

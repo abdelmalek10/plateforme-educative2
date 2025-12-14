@@ -11,8 +11,10 @@ import json
 # Fonction pour publier l'événement dans RabbitMQ
 def publish_inscription_event(data):
     # Connexion à RabbitMQ
+    from platforme_educatif.settings import RABBITMQ_HOST, RABBITMQ_USER, RABBITMQ_PASS
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASS)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST, credentials=credentials))
         channel = connection.channel()
 
         # Déclarer la queue 'inscriptions' si elle n'existe pas
@@ -30,7 +32,7 @@ def publish_inscription_event(data):
 
         connection.close()
     except Exception as e:
-        print(f"Erreur RabbitMQ: {e}") # Student dev: "just print it"
+        print(f"Erreur RabbitMQ: {e}")
 
 class CoursViewSet(viewsets.ModelViewSet):
     queryset = Cours.objects.all().order_by("-date_creation")
@@ -115,7 +117,7 @@ class CoursViewSet(viewsets.ModelViewSet):
         user = request.user
         role = getattr(user, "role", None)
         
-        if role == "TEACHER":
+        if role == "TEACHER" or role == "ADMIN":
             cours = Cours.objects.filter(prof_id=user.id)
             return Response(self.get_serializer(cours, many=True).data)
 
